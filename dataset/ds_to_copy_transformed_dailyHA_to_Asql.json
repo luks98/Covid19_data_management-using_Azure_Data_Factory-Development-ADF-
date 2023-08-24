@@ -1,0 +1,61 @@
+{
+	"name": "ds_to_copy_transformed_dailyHA_to_Asql",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_adls_covidreportingdl",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "sql"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "daily hospital_admission.csv",
+				"folderPath": "ecdc/daily hospital_admission",
+				"fileSystem": "transformeddatafromdataflow"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "country",
+				"type": "String"
+			},
+			{
+				"name": "country_code_2_digit",
+				"type": "String"
+			},
+			{
+				"name": "country_code_3_digit",
+				"type": "String"
+			},
+			{
+				"name": "population",
+				"type": "String"
+			},
+			{
+				"name": "reported_date",
+				"type": "String"
+			},
+			{
+				"name": "source",
+				"type": "String"
+			},
+			{
+				"name": " hospital occupancy_count",
+				"type": "String"
+			},
+			{
+				"name": " ICU occupancy_count",
+				"type": "String"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

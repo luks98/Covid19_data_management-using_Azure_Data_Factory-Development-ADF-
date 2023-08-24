@@ -1,0 +1,57 @@
+{
+	"name": "ds_to_transform_hospital_addmission_data",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_adls_covidreportingdl",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "ds_for_transformation"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "hospital_admissions.csv",
+				"folderPath": "ecdc_data/hospital_admissions",
+				"fileSystem": "raw"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "country",
+				"type": "String"
+			},
+			{
+				"name": "indicator",
+				"type": "String"
+			},
+			{
+				"name": "date",
+				"type": "String"
+			},
+			{
+				"name": "year_week",
+				"type": "String"
+			},
+			{
+				"name": "value",
+				"type": "String"
+			},
+			{
+				"name": "source",
+				"type": "String"
+			},
+			{
+				"name": "url",
+				"type": "String"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

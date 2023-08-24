@@ -1,0 +1,33 @@
+{
+	"name": "Tr_transforme_cases_and_deaths",
+	"properties": {
+		"annotations": [],
+		"runtimeState": "Started",
+		"pipeline": {
+			"pipelineReference": {
+				"referenceName": "pipeline_to_transform_and_load_to_ADLS__cases_and_deaths_data",
+				"type": "PipelineReference"
+			}
+		},
+		"type": "TumblingWindowTrigger",
+		"typeProperties": {
+			"frequency": "Hour",
+			"interval": 24,
+			"startTime": "2023-08-14T23:59:00Z",
+			"delay": "00:00:00",
+			"maxConcurrency": 50,
+			"retryPolicy": {
+				"intervalInSeconds": 30
+			},
+			"dependsOn": [
+				{
+					"type": "TumblingWindowTriggerDependencyReference",
+					"referenceTrigger": {
+						"referenceName": "Tr_ingest_ecdc_data",
+						"type": "TriggerReference"
+					}
+				}
+			]
+		}
+	}
+}

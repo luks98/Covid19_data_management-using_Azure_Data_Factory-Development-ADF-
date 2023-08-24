@@ -1,0 +1,33 @@
+{
+	"name": "Tr_sqalize_hospital_admission_data",
+	"properties": {
+		"annotations": [],
+		"runtimeState": "Started",
+		"pipeline": {
+			"pipelineReference": {
+				"referenceName": "pipeline_to_copy_transformed_Daily_HA_to_ASQL",
+				"type": "PipelineReference"
+			}
+		},
+		"type": "TumblingWindowTrigger",
+		"typeProperties": {
+			"frequency": "Hour",
+			"interval": 24,
+			"startTime": "2023-08-14T23:59:00Z",
+			"delay": "00:00:00",
+			"maxConcurrency": 50,
+			"retryPolicy": {
+				"intervalInSeconds": 30
+			},
+			"dependsOn": [
+				{
+					"type": "TumblingWindowTriggerDependencyReference",
+					"referenceTrigger": {
+						"referenceName": "Tr_transform_Hospital_Admission_Data",
+						"type": "TriggerReference"
+					}
+				}
+			]
+		}
+	}
+}

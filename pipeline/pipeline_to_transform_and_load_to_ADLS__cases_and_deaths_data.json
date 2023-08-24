@@ -1,0 +1,37 @@
+{
+	"name": "pipeline_to_transform_and_load_to_ADLS__cases_and_deaths_data",
+	"properties": {
+		"activities": [
+			{
+				"name": "Data flow to transform cases and deaths",
+				"type": "ExecuteDataFlow",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "dataflow_to_transform_cases_and_deaths",
+						"type": "DataFlowReference"
+					},
+					"compute": {
+						"coreCount": 8,
+						"computeType": "General"
+					},
+					"traceLevel": "Fine"
+				}
+			}
+		],
+		"folder": {
+			"name": "data_transforming_pipelines"
+		},
+		"annotations": [],
+		"lastPublishTime": "2023-08-24T06:51:49Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}
