@@ -1,0 +1,90 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "covid-reporting-adf-re"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/Tr_sqalize_cases_and_deaths_data')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Started",
+				"pipeline": {
+					"pipelineReference": {
+						"referenceName": "pipeline_to_copy_transformed_cases_and_deaths_to_AsqlDB",
+						"type": "PipelineReference"
+					},
+					"parameters": {}
+				},
+				"type": "TumblingWindowTrigger",
+				"typeProperties": {
+					"frequency": "Hour",
+					"interval": 24,
+					"startTime": "2023-08-14T23:59:00Z",
+					"delay": "00:00:00",
+					"maxConcurrency": 50,
+					"retryPolicy": {
+						"intervalInSeconds": 30
+					},
+					"dependsOn": [
+						{
+							"type": "TumblingWindowTriggerDependencyReference",
+							"referenceTrigger": {
+								"referenceName": "Tr_transforme_cases_and_deaths",
+								"type": "TriggerReference"
+							}
+						}
+					]
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Tr_sqalize_hospital_admission_data')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Started",
+				"pipeline": {
+					"pipelineReference": {
+						"referenceName": "pipeline_to_copy_transformed_Daily_HA_to_ASQL",
+						"type": "PipelineReference"
+					},
+					"parameters": {}
+				},
+				"type": "TumblingWindowTrigger",
+				"typeProperties": {
+					"frequency": "Hour",
+					"interval": 24,
+					"startTime": "2023-08-14T23:59:00Z",
+					"delay": "00:00:00",
+					"maxConcurrency": 50,
+					"retryPolicy": {
+						"intervalInSeconds": 30
+					},
+					"dependsOn": [
+						{
+							"type": "TumblingWindowTriggerDependencyReference",
+							"referenceTrigger": {
+								"referenceName": "Tr_transform_Hospital_Admission_Data",
+								"type": "TriggerReference"
+							}
+						}
+					]
+				}
+			},
+			"dependsOn": []
+		}
+	]
+}

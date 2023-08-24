@@ -1,0 +1,146 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "covid-reporting-adf-re"
+		},
+		"ls_ablob_covidreportingsa_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'ls_ablob_covidreportingsa'"
+		},
+		"ls_adls_covidreportingdl_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'ls_adls_covidreportingdl'"
+		},
+		"ls_azuresa_covidreporting_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'ls_azuresa_covidreporting'"
+		},
+		"ls_for_transformation_using_db_accessToken": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accessToken' of 'ls_for_transformation_using_db'"
+		},
+		"ls_sql_covid_db_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'ls_sql_covid_db'",
+			"defaultValue": "Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=;Initial Catalog="
+		},
+		"ls_adls_covidreportingdl_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://covidreportingdl985.dfs.core.windows.net/"
+		},
+		"ls_for_transformation_using_db_properties_typeProperties_existingClusterId": {
+			"type": "string",
+			"defaultValue": "0815-055340-zzmxta3x"
+		},
+		"ls_to_copy_ecdc_data_from_http_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "@{linkedService().sourceBaseURL}"
+		},
+		"Tr_population_data_arrived_properties_typeProperties_scope": {
+			"type": "string",
+			"defaultValue": "/subscriptions/a921c292-16ca-454d-866f-9290c9ca602c/resourceGroups/Covid-reporting-rg/providers/Microsoft.Storage/storageAccounts/covidreportingsa59"
+		},
+		"containerUri": {
+			"type": "string",
+			"metadata": "URI to storage account containing linked ARM templates"
+		},
+		"containerSasToken": {
+			"type": "string",
+			"metadata": "Sas token to storage account containing linked ARM templates"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "covid-reporting-adf-re_ArmTemplate_0",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_0.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					},
+					"ls_ablob_covidreportingsa_connectionString": {
+						"value": "[parameters('ls_ablob_covidreportingsa_connectionString')]"
+					},
+					"ls_adls_covidreportingdl_accountKey": {
+						"value": "[parameters('ls_adls_covidreportingdl_accountKey')]"
+					},
+					"ls_azuresa_covidreporting_connectionString": {
+						"value": "[parameters('ls_azuresa_covidreporting_connectionString')]"
+					},
+					"ls_for_transformation_using_db_accessToken": {
+						"value": "[parameters('ls_for_transformation_using_db_accessToken')]"
+					},
+					"ls_sql_covid_db_connectionString": {
+						"value": "[parameters('ls_sql_covid_db_connectionString')]"
+					},
+					"ls_adls_covidreportingdl_properties_typeProperties_url": {
+						"value": "[parameters('ls_adls_covidreportingdl_properties_typeProperties_url')]"
+					},
+					"ls_for_transformation_using_db_properties_typeProperties_existingClusterId": {
+						"value": "[parameters('ls_for_transformation_using_db_properties_typeProperties_existingClusterId')]"
+					},
+					"ls_to_copy_ecdc_data_from_http_properties_typeProperties_url": {
+						"value": "[parameters('ls_to_copy_ecdc_data_from_http_properties_typeProperties_url')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "covid-reporting-adf-re_ArmTemplate_1",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_1.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					},
+					"Tr_population_data_arrived_properties_typeProperties_scope": {
+						"value": "[parameters('Tr_population_data_arrived_properties_typeProperties_scope')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'covid-reporting-adf-re_ArmTemplate_0')]"
+			]
+		},
+		{
+			"name": "covid-reporting-adf-re_ArmTemplate_2",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_2.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'covid-reporting-adf-re_ArmTemplate_1')]"
+			]
+		}
+	]
+}
